@@ -2,10 +2,8 @@ package eu.deschler.dapro;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-
 import java.util.Set;
 import java.util.HashSet;
-
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 

@@ -2,7 +2,6 @@ package eu.deschler.dapro;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

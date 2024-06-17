@@ -5,26 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
-
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-
-import com.mongodb.client.model.Sorts;
-import org.bson.types.ObjectId;
 
 public class CustomerDao implements Serializable {
 
     private static final long serialVersionUID = -8151490228254675155L;
     private static CustomerDao instance = new CustomerDao();
-
     private static final String DATABASE = "dapro_01"; //TODO replace with your database number
     private static final String CONNECTION_STRING = "mongodb://dapro_01:dapro_01@localhost/dapro_01"; //TODO replace x 3
     private MongoClient mongoClient;
@@ -37,10 +31,8 @@ public class CustomerDao implements Serializable {
                 .fromProviders(PojoCodecProvider.builder().automatic(true).build());
         CodecRegistry codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 pojoCodecRegistry);
-
         MongoClientSettings clientSettings = MongoClientSettings.builder().applyConnectionString(connectionString)
                 .codecRegistry(codecRegistry).build();
-
         mongoClient = MongoClients.create(clientSettings);
 
     }
@@ -96,7 +88,6 @@ public class CustomerDao implements Serializable {
         else {
             return (int) customers.countDocuments(eq("last_name",filter));
         }
-        
     }
 
     void deleteCustomer(Customer c) {
@@ -119,16 +110,16 @@ public class CustomerDao implements Serializable {
         this.filter = filter;
     }
 
-    public boolean customerWithNumberExists(int customerNo) {
+    public boolean customerNumberExists(int customer_no) {
         MongoCollection<Customer> customers = mongoClient.getDatabase(DATABASE).getCollection("customers",
         Customer.class);
-        return customers.find(eq("customer_no",customerNo)).first() != null;
+        return customers.find(eq("customer_no",customer_no)).first() != null;
     }
 
-    public Customer getCustomerByCustomerNo(int customerNo) {
+    public Customer getCustomerByCustomerNumber(int customer_no) {
         MongoCollection<Customer> customers = mongoClient.getDatabase(DATABASE).getCollection("customers",
         Customer.class);
-        return customers.find(eq("customer_no",customerNo)).first();
+        return customers.find(eq("customer_no",customer_no)).first();
     }
 
     public static CustomerDao getInstance() {

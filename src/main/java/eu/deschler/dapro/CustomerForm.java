@@ -7,27 +7,21 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 
 public class CustomerForm extends FormLayout{
     private static final long serialVersionUID = 1L;
-
     private CustomerView customerView;
-
     private TextField firstName = new TextField("Vorname");
     private TextField lastName = new TextField("Name");
     private DatePicker dateOfBirth = new DatePicker("Geburtsdatum");
     private CheckboxGroup<String> drivingLicenseClasses = new CheckboxGroup<>();
     private Button save = new Button("Speichern");
     private Button delete = new Button("Löschen");
-
     private Binder<Customer> binder = new Binder<>(Customer.class);
-
     private CustomerDao dao = CustomerDao.getInstance();
 
     public CustomerForm(CustomerView customerView) {
-        // status.setItems(CustomerStatus.values());
         this.customerView = customerView;
         HorizontalLayout buttons = new HorizontalLayout(save, delete);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -35,10 +29,8 @@ public class CustomerForm extends FormLayout{
 
         drivingLicenseClasses.setLabel("Führerscheinklassen");
         drivingLicenseClasses.setItems("A", "B", "C", "D");
-
-
-
         binder.bindInstanceFields(this);
+
         save.addClickListener(event -> {
             if (binder.getBean().getId() == null) {
                 binder.getBean().setCustomerNo(dao.getCustomerCount() + 1);
@@ -47,8 +39,6 @@ public class CustomerForm extends FormLayout{
                 updateCustomer();
             }
         });
-
-        // Löschen des Kunden
         delete.addClickListener(event -> delete());
     }
 

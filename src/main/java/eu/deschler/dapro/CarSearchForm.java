@@ -26,7 +26,7 @@ public class CarSearchForm extends FormLayout {
         sitzplaetze.setHasControls(true);
         sitzplaetze.setStep(1);
         sitzplaetze.setMin(1);
-        sitzplaetze.setMax(6);
+        sitzplaetze.setMax(7);
         autoart.setHasControls(true);
         autoart.setStep(1);
         autoart.setMin(1);

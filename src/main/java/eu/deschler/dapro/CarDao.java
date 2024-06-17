@@ -103,12 +103,12 @@ public class CarDao {
             return false;
         }
 
-        if (!customerDao.customerWithNumberExists(customerID)) {
+        if (!customerDao.customerNumberExists(customerID)) {
             CarReservationForm.showNotification("Kunde existiert nicht!", NotificationVariant.LUMO_ERROR);
             return false;
         }
 
-        Customer customer = customerDao.getCustomerByCustomerNo(customerID);
+        Customer customer = customerDao.getCustomerByCustomerNumber(customerID);
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT Fuehrerschein FROM Automodell WHERE ID = ?");
             statement.setInt(1, carID);
