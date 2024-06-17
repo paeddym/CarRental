@@ -9,8 +9,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 public class CarSearchForm extends FormLayout {
-    private CarView carView;
-
     private TextField bezeichnung = new TextField("Bezeichnung");
     private TextField hersteller = new TextField("Hersteller");
     private IntegerField autoart = new IntegerField("Autoart");
@@ -21,28 +19,24 @@ public class CarSearchForm extends FormLayout {
     private CarDao dao = CarDao.getInstance();
 
     public CarSearchForm(CarView carView) {
-        this.carView = carView;
         HorizontalLayout buttons = new HorizontalLayout(search);
         setVisible(false);
-        search.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        //autoart.setValue(1);
+        search.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        sitzplaetze.setHasControls(true);
+        sitzplaetze.setStep(1);
+        sitzplaetze.setMin(1);
+        sitzplaetze.setMax(6);
         autoart.setHasControls(true);
         autoart.setStep(1);
         autoart.setMin(1);
         autoart.setMax(7);
 
-        //sitzplaetze.setValue(1);
-        sitzplaetze.setHasControls(true);
-        sitzplaetze.setStep(1);
-        sitzplaetze.setMin(1);
-        sitzplaetze.setMax(6);
-
         add(bezeichnung, hersteller, autoart,sitzplaetze, treibstoff, buttons);
 
         binder.bindInstanceFields(this);
 
-        binder.setBean(new Car()); // Set a new Car object as the bean
+        binder.setBean(new Car());
 
         search.addClickListener(event -> {
             String filter = "";

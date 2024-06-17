@@ -1,8 +1,6 @@
 package eu.deschler.dapro;
 
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -97,21 +95,19 @@ public class CarDao {
     }
 
     public boolean isReservationValid(int carID, int customerID, LocalDate reservationStart, LocalDate reservationEnd) {
+
         CustomerDao customerDao = CustomerDao.getInstance();
 
-        //Sind die Reservierungstermine sinnvoll?
         if (reservationStart == null || reservationEnd == null || reservationStart.isAfter(reservationEnd)) {
             CarReservationForm.showNotification("Das Enddatum ist vor dem Anfangsdatum!", NotificationVariant.LUMO_ERROR);
             return false;
         }
 
-        //Existiert der Kunde?
         if (!customerDao.customerWithNumberExists(customerID)) {
             CarReservationForm.showNotification("Kunde existiert nicht!", NotificationVariant.LUMO_ERROR);
             return false;
         }
 
-        //Hat der Kunde den passenden Führerschein?
         Customer customer = customerDao.getCustomerByCustomerNo(customerID);
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT Fuehrerschein FROM Automodell WHERE ID = ?");
@@ -127,7 +123,6 @@ public class CarDao {
             e.printStackTrace();
         }
 
-        //Ist in der Zeit das Auto bereits reserviert?
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Reservierung WHERE (ModellID = ? AND Beginn <= ? AND Ende >= ?) OR (ModellID = ? AND Beginn <= ? AND Ende >= ?) OR (ModellID = ? AND Beginn <= ? AND Ende >= ?)");
             statement.setInt(1, carID);
@@ -141,7 +136,7 @@ public class CarDao {
             statement.setDate(9, Date.valueOf(reservationStart));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                CarReservationForm.showNotification("Auto ist in diesem Zeitraum bereits reserviert!", NotificationVariant.LUMO_ERROR);
+                CarReservationForm.showNotification("Auto ist in diesem Zeitraum nicht reserviert werden!", NotificationVariant.LUMO_ERROR);
                 return false;
             }
         } catch (SQLException e) {

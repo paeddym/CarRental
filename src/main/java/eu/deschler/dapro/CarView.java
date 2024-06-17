@@ -1,7 +1,6 @@
 package eu.deschler.dapro;
 
 import java.util.List;
-
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,12 +16,9 @@ public class CarView extends VerticalLayout {
 
     private DataProvider<Car, Void> dp =
             DataProvider.fromCallbacks(
-                    // First callback fetches items based on a query
                     query -> {
-                        // The index of the first item to load
                         int offset = query.getOffset();
 
-                        // The number of items to load
                         int limit = query.getLimit();
 
                         List<Car> cars = dao
@@ -30,8 +26,7 @@ public class CarView extends VerticalLayout {
 
                         return cars.stream();
                     },
-                    // Second callback fetches the number of items
-                    // for a query
+
                     query -> dao.getCarCount());
 
     public CarView() {
@@ -55,14 +50,12 @@ public class CarView extends VerticalLayout {
         mainContent.setSizeFull();
         grid.setWidthFull();
 
-        // Listener für die Auswahl im Grid
         grid.asSingleSelect().addValueChangeListener(event -> {
             Car selectedCar = event.getValue();
             form.setVisible(false);
             reservationForm.startReservation(selectedCar);
         });
 
-        // Hinzufügen des "Fahrzeug suchen"-Buttons
         Button searchButton = new Button("Fahrzeug suchen");
         searchButton.addClickListener(event -> {
             form.setVisible(true);
@@ -72,10 +65,7 @@ public class CarView extends VerticalLayout {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.add(mainContent, searchButton);
 
-        add(mainContent);
-
-        add(verticalLayout);
-
+        add(mainContent, verticalLayout);
     }
 
     public void updateList() {

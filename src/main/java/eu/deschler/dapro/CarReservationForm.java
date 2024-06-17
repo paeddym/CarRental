@@ -11,17 +11,14 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.component.notification.Notification;
 
 public class CarReservationForm extends FormLayout {
-    private CarView carView;
     private IntegerField customerNo = new IntegerField("Kundennummer");
     private int carID;
     private DatePicker reservationStart = new DatePicker("Reservierungsbeginn");
     private DatePicker reservationEnd = new DatePicker("Reservierungsende");
     private Button saveButton = new Button("Speichern");
-    private Binder<Customer> binder = new Binder<>(Customer.class);
     private CarDao dao = CarDao.getInstance();
 
     public CarReservationForm(CarView carView){
-        this.carView = carView;
         HorizontalLayout buttonsLayout = new HorizontalLayout(saveButton);
         setVisible(false);
 
