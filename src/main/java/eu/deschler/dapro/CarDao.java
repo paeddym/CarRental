@@ -124,21 +124,29 @@ public class CarDao {
         }
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Reservierung WHERE (ModellID = ? AND Beginn <= ? AND Ende >= ?) OR (ModellID = ? AND Beginn <= ? AND Ende >= ?) OR (ModellID = ? AND Beginn <= ? AND Ende >= ?)");
-            statement.setInt(1, carID);
-            statement.setDate(2, Date.valueOf(reservationStart));
-            statement.setDate(3, Date.valueOf(reservationStart));
-            statement.setInt(4, carID);
-            statement.setDate(5, Date.valueOf(reservationEnd));
-            statement.setDate(6, Date.valueOf(reservationEnd));
-            statement.setInt(7, carID);
-            statement.setDate(8, Date.valueOf(reservationEnd));
-            statement.setDate(9, Date.valueOf(reservationStart));
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                CarView.showNotification("Auto ist in diesem Zeitraum nicht reserviert werden!", NotificationVariant.LUMO_ERROR);
+            PreparedStatement reservationStatement = connection.prepareStatement("SELECT COUNT(*) FROM Reservierung WHERE (ModellID = ? AND Beginn <= ? AND Ende >= ?) OR (ModellID = ? AND Beginn <= ? AND Ende >= ?) OR (ModellID = ? AND Beginn <= ? AND Ende >= ?)");
+            reservationStatement.setInt(1, carID);
+            reservationStatement.setDate(2, Date.valueOf(reservationStart));
+            reservationStatement.setDate(3, Date.valueOf(reservationStart));
+            reservationStatement.setInt(4, carID);
+            reservationStatement.setDate(5, Date.valueOf(reservationEnd));
+            reservationStatement.setDate(6, Date.valueOf(reservationEnd));
+            reservationStatement.setInt(7, carID);
+            reservationStatement.setDate(8, Date.valueOf(reservationEnd));
+            reservationStatement.setDate(9, Date.valueOf(reservationStart));
+            ResultSet reservationSet = reservationStatement.executeQuery();
+            reservationSet.next();
+
+            PreparedStatement modelStatement = connection.prepareStatement("SELECT COUNT(*) FROM Auto WHERE Modell = ? ");
+            modelStatement.setInt(1, carID);
+            ResultSet modelSet = modelStatement.executeQuery();
+            modelSet.next();
+
+            if (reservationSet.getInt(1) >= modelSet.getInt(1)) {
+                CarView.showNotification("Kein Auto dieses Modell ist in dem Zeitraum verfügbar!", NotificationVariant.LUMO_ERROR);
                 return false;
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
