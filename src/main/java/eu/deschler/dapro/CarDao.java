@@ -99,12 +99,12 @@ public class CarDao {
         CustomerDao customerDao = CustomerDao.getInstance();
 
         if (reservationStart == null || reservationEnd == null || reservationStart.isAfter(reservationEnd)) {
-            CarReservationForm.showNotification("Das Enddatum ist vor dem Anfangsdatum!", NotificationVariant.LUMO_ERROR);
+            CarView.showNotification("Das Enddatum ist vor dem Anfangsdatum!", NotificationVariant.LUMO_ERROR);
             return false;
         }
 
         if (!customerDao.customerNumberExists(customerID)) {
-            CarReservationForm.showNotification("Kunde existiert nicht!", NotificationVariant.LUMO_ERROR);
+            CarView.showNotification("Kunde existiert nicht!", NotificationVariant.LUMO_ERROR);
             return false;
         }
 
@@ -116,7 +116,7 @@ public class CarDao {
             resultSet.next();
             String fuehrerschein = resultSet.getString("Fuehrerschein");
             if (!customer.getDrivingLicenseClasses().contains(fuehrerschein)) {
-                CarReservationForm.showNotification("Kunde hat nicht den passenden Führerschein!", NotificationVariant.LUMO_ERROR);
+                CarView.showNotification("Kunde hat nicht den passenden Führerschein!", NotificationVariant.LUMO_ERROR);
                 return false;
             }
         } catch (SQLException e) {
@@ -136,7 +136,7 @@ public class CarDao {
             statement.setDate(9, Date.valueOf(reservationStart));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                CarReservationForm.showNotification("Auto ist in diesem Zeitraum nicht reserviert werden!", NotificationVariant.LUMO_ERROR);
+                CarView.showNotification("Auto ist in diesem Zeitraum nicht reserviert werden!", NotificationVariant.LUMO_ERROR);
                 return false;
             }
         } catch (SQLException e) {

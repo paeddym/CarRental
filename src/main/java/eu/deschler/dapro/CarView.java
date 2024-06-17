@@ -2,6 +2,8 @@ package eu.deschler.dapro;
 
 import java.util.List;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -70,5 +72,11 @@ public class CarView extends VerticalLayout {
 
     public void updateList() {
         dp.refreshAll();
+    }
+
+    public static void showNotification(String message, NotificationVariant variant) {
+        Notification notification = Notification
+                .show(message);
+        notification.addThemeVariants(variant);
     }
 }

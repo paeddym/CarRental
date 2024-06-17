@@ -14,18 +14,18 @@ public class CarReservationForm extends FormLayout {
     private IntegerField customer_no = new IntegerField("Kundennummer");
     private DatePicker reservationStart = new DatePicker("Reservierungsbeginn");
     private DatePicker reservationEnd = new DatePicker("Reservierungsende");
-    private Button saveButton = new Button("Speichern");
+    private Button confirmButton = new Button("Reservieren");
     private CarDao dao = CarDao.getInstance();
 
     public CarReservationForm(){
-        HorizontalLayout buttonsLayout = new HorizontalLayout(saveButton);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(confirmButton);
         setVisible(false);
 
         customer_no.setRequiredIndicatorVisible(true);
         reservationStart.setRequired(true);
         reservationEnd.setRequired(true);
-        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        saveButton.addClickListener(event -> save());
+        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        confirmButton.addClickListener(event -> confirm());
 
         add(customer_no, reservationStart, reservationEnd, buttonsLayout);
     }
@@ -35,21 +35,15 @@ public class CarReservationForm extends FormLayout {
         setVisible(true);
     }
 
-    private void save() {
+    private void confirm() {
         if(customer_no.getValue() == null) {
-            showNotification("Bitte geben Sie eine Kundennummer ein!", NotificationVariant.LUMO_ERROR);
+            CarView.showNotification("Bitte geben Sie eine Kundennummer ein!", NotificationVariant.LUMO_ERROR);
             return;
         }
         if(dao.isReservationValid(carID, customer_no.getValue(), reservationStart.getValue(), reservationEnd.getValue())) {
             dao.reserve(carID, customer_no.getValue(), reservationStart.getValue(), reservationEnd.getValue());
-            showNotification("Reservierung erfolgreich!", NotificationVariant.LUMO_SUCCESS);
+            CarView.showNotification("Reservierung erfolgreich!", NotificationVariant.LUMO_SUCCESS);
             setVisible(false);
         }
-    }
-    
-    public static void showNotification(String message, NotificationVariant variant) {
-        Notification notification = Notification
-                .show(message);
-        notification.addThemeVariants(variant);
     }
 }
