@@ -12,7 +12,7 @@ public class CarView extends VerticalLayout {
     private CarDao dao = CarDao.getInstance();
     private Grid<Car> grid = new Grid<>();
     private CarSearchForm form = new CarSearchForm(this);
-    private CarReservationForm reservationForm = new CarReservationForm(this);
+    private CarReservationForm reservationForm = new CarReservationForm();
 
     private DataProvider<Car, Void> dp =
             DataProvider.fromCallbacks(
